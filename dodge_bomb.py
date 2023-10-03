@@ -12,6 +12,20 @@ delta = {  # 練習3:移動用辞書
 }
 
 
+def check_bound(obj_rct: pg.Rect):
+    """
+    引数はこうかとんRectか爆弾Rect
+    戻り値:タプル(横方向判定結果,縦方向判定結果)
+    画面内ならTrue,画面外ならFalse
+    """
+    yoko, tate = True, True
+    if obj_rct.left < 0 or WIDTH < obj_rct.right:
+        yoko = False
+    if obj_rct.top < 0 or WIDTH < obj_rct.bottom:
+        tate = False
+    return yoko, tate
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -20,7 +34,7 @@ def main():
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_rct = kk_img.get_rect()
-    kk_rct.center = (900, 400)
+    kk_rct.center = (900, 400)  # 練習3:練習３：こうかとんの初期座標を設定する
     """爆弾"""
     bd_img = pg.Surface((20, 20))  # 練習1:爆弾Surface を作成
     pg.draw.circle(bd_img, (255, 0, 0), (10, 10), 10)
@@ -46,7 +60,7 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0]  # 練習3:横方向の合計移動量
                 sum_mv[1] += mv[1]  # 練習3縦方向の合計移動量
-        kk_rct.move_ip(sum_mv[0], sum_mv[1])  # 練習3:
+        kk_rct.move_ip(sum_mv[0], sum_mv[1])  # 練習3:移動させる
         screen.blit(kk_img, kk_rct)  # 演習3:移動後の座標に表示
         """爆弾"""
         bd_rct.move_ip(vx, vy)  # 練習2:爆弾Rect のmove_ip vx , vy メソッドで速度に応じて位置を移動させる
