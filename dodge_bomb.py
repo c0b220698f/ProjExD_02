@@ -21,7 +21,7 @@ def check_bound(obj_rct: pg.Rect):
     yoko, tate = True, True
     if obj_rct.left < 0 or WIDTH < obj_rct.right:
         yoko = False
-    if obj_rct.top < 0 or WIDTH < obj_rct.bottom:
+    if obj_rct.top < 0 or HEIGHT < obj_rct.bottom:
         tate = False
     return yoko, tate
 
@@ -61,9 +61,16 @@ def main():
                 sum_mv[0] += mv[0]  # 練習3:横方向の合計移動量
                 sum_mv[1] += mv[1]  # 練習3縦方向の合計移動量
         kk_rct.move_ip(sum_mv[0], sum_mv[1])  # 練習3:移動させる
+        if check_bound(kk_rct) != (True, True):  # 練習4:はみ出し判定
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)  # 演習3:移動後の座標に表示
         """爆弾"""
         bd_rct.move_ip(vx, vy)  # 練習2:爆弾Rect のmove_ip vx , vy メソッドで速度に応じて位置を移動させる
+        yoko, tate = check_bound(bd_rct)
+        if not yoko:  # 練習4:横方向にはみ出たら
+            vx *= -1
+        if not tate:  # 練習4:縦方向にはみ出たら
+            vy *= -1
         screen.blit(bd_img, bd_rct)  # 練習1:while ループの中でblit して，表示されるか確認
         pg.display.update()
         tmr += 1
