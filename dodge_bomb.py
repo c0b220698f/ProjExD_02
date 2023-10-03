@@ -26,6 +26,37 @@ def check_bound(obj_rct: pg.Rect):
     return yoko, tate
 
 
+def kk_theta(key_tuple: tuple):  # 演習1
+    """
+    こうかとんの飛ぶ方向を切り替える関数
+    引数key_tuple:押下キーに対する移動量の合計タプル
+    戻り値:rotozoomしたこうかとんのSurface
+    """
+    kk_img = pg.image.load("ex02/fig/3.png")
+
+    zero = pg.transform.rotozoom(kk_img, 0, 2.0)  # 0
+    z45 = pg.transform.rotozoom(kk_img, 45, 2.0)  # 45
+    mz45 = pg.transform.rotozoom(kk_img, -45, 2.0)  # -45
+    z90 = pg.transform.rotozoom(kk_img, 90, 2.0)  # 90
+    fz90 = pg.transform.flip(z90, True, False)  # 90左右反転
+    mz90 = pg.transform.flip(z90, False, True)  # -90上下反転
+    fz45 = pg.transform.flip(z45, True, False)  # 135(45左右反転)
+    mfz45 = pg.transform.flip(mz45, True, False)  # 225(-45左右反転)
+    fzero = pg.transform.flip(zero, True, False)  # 180
+    theta_img = {
+        (-5, 0): zero,
+        (-5, 5): z45,
+        (0, 5): fz90,
+        (5, 5): fz45,
+        (5, 0): fzero,
+        (5, -5): mfz45,
+        (0, -5): mz90,
+        (-5, -5): mz45,
+    }
+    if key_tuple in theta_img:
+        return theta_img[key_tuple]
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -35,6 +66,7 @@ def main():
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = (900, 400)  # 練習3:練習３：こうかとんの初期座標を設定する
+
     """爆弾"""
     bd_img = pg.Surface((20, 20))  # 練習1:爆弾Surface を作成
     pg.draw.circle(bd_img, (255, 0, 0), (10, 10), 10)
@@ -56,13 +88,20 @@ def main():
             return
         screen.blit(bg_img, [0, 0])
         """こうかとん"""
+        # accs = [a for a in range(1, 11)]  # 加速度のリスト
+        # for r in range(1, 11):
+        #     bb_img = pg.Surface((20 * r, 20 * r))
+        #     pg.draw.circle(bb_img, (255, 0, 0), (10 * r, 10 * r), 10 * r)
+        #     bb_imgs.append(bb_img)
+
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         for key, mv in delta.items():
             if key_lst[key]:
                 sum_mv[0] += mv[0]  # 練習3:横方向の合計移動量
                 sum_mv[1] += mv[1]  # 練習3縦方向の合計移動量
-        kk_rct.move_ip(sum_mv[0], sum_mv[1])  # 練習3:移動させる
+                kk_img = kk_theta(mv)
+            kk_rct.move_ip(sum_mv[0], sum_mv[1])  # 練習3:移動させる
         if check_bound(kk_rct) != (True, True):  # 練習4:はみ出し判定
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)  # 演習3:移動後の座標に表示
