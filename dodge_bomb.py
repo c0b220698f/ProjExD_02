@@ -36,22 +36,22 @@ def kk_theta(key_tuple: tuple):  # 演習1
 
     zero = pg.transform.rotozoom(kk_img, 0, 2.0)  # 0
     z45 = pg.transform.rotozoom(kk_img, 45, 2.0)  # 45
-    mz45 = pg.transform.rotozoom(kk_img, -45, 2.0)  # -45
+    minus_z45 = pg.transform.rotozoom(kk_img, -45, 2.0)  # -45
     z90 = pg.transform.rotozoom(kk_img, 90, 2.0)  # 90
-    fz90 = pg.transform.flip(z90, True, False)  # 90左右反転
-    mz90 = pg.transform.flip(z90, False, True)  # -90上下反転
-    fz45 = pg.transform.flip(z45, True, False)  # 135(45左右反転)
-    mfz45 = pg.transform.flip(mz45, True, False)  # 225(-45左右反転)
-    fzero = pg.transform.flip(zero, True, False)  # 180
+    flip_z90 = pg.transform.flip(z90, True, False)  # 90左右反転
+    minus_z90 = pg.transform.flip(z90, False, True)  # -90上下反転
+    flip_z45 = pg.transform.flip(z45, True, False)  # 135(45左右反転)
+    minus_fz45 = pg.transform.flip(minus_z45, True, False)  # 225(-45左右反転)
+    flip_zero = pg.transform.flip(zero, True, False)  # 180
     theta_img = {
         (-5, 0): zero,
         (-5, 5): z45,
-        (0, 5): fz90,
-        (5, 5): fz45,
-        (5, 0): fzero,
-        (5, -5): mfz45,
-        (0, -5): mz90,
-        (-5, -5): mz45,
+        (0, 5): flip_z90,
+        (5, 5): flip_z45,
+        (5, 0): flip_zero,
+        (5, -5): minus_fz45,
+        (0, -5): minus_z90,
+        (-5, -5): minus_z45,
     }
     if key_tuple in theta_img:
         return theta_img[key_tuple]
@@ -88,11 +88,6 @@ def main():
             return
         screen.blit(bg_img, [0, 0])
         """こうかとん"""
-        # accs = [a for a in range(1, 11)]  # 加速度のリスト
-        # for r in range(1, 11):
-        #     bb_img = pg.Surface((20 * r, 20 * r))
-        #     pg.draw.circle(bb_img, (255, 0, 0), (10 * r, 10 * r), 10 * r)
-        #     bb_imgs.append(bb_img)
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
