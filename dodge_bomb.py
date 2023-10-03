@@ -17,10 +17,10 @@ def main():
     bd_img.set_colorkey((0, 0, 0))  # 爆弾Surface の黒い部分を透明にする
     x, y = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     bd_rct.center = (x, y)  # 練習1:爆弾Surfaceをランダムな位置に配置
+    vx, vy = +5, +5  # 練習2:爆弾を移動させるための変数
 
     clock = pg.time.Clock()
     tmr = 0
-
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -28,10 +28,11 @@ def main():
 
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
+        bd_rct.move_ip(vx, vy)  # 練習2:爆弾Rect のmove_ip vx , vy メソッドで速度に応じて位置を移動させる
         screen.blit(bd_img, bd_rct)  # 練習1:while ループの中でblit して，表示されるか確認
         pg.display.update()
         tmr += 1
-        clock.tick(10)
+        clock.tick(50)
 
 
 if __name__ == "__main__":
