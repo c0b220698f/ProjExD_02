@@ -95,7 +95,7 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0]  # 練習3:横方向の合計移動量
                 sum_mv[1] += mv[1]  # 練習3縦方向の合計移動量
-                kk_img = kk_theta(mv)
+                kk_img = kk_theta(mv)  # こうかとんの飛ぶ方向を切り替える関数を代入
             kk_rct.move_ip(sum_mv[0], sum_mv[1])  # 練習3:移動させる
         if check_bound(kk_rct) != (True, True):  # 練習4:はみ出し判定
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
